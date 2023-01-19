@@ -2,9 +2,8 @@
 
 **Python 2 - Download**
 
-'''
-zapstiko@htb[/htb]$ python2.7 -c 'import urllib;urllib.urlretrieve ("https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh", "LinEnum.sh")'
-'''
+''' zapstiko@htb[/htb]$ python2.7 -c 'import urllib;urllib.urlretrieve ("https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh", "LinEnum.sh")' '''
+
 
 Python 3 - Download
 
